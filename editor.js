@@ -54,5 +54,13 @@ e.target.value = '';
 }
 }
 });
+document.getElementById('insertTable').addEventListener('click', ()=>{
+let r = parseInt(prompt('Rows', '2')) || 0;
+let c = parseInt(prompt('Columns', '2')) || 0;
+if(r>0 && c>0){
+const tbl = this._buildTableHTML(r,c);
+this._insertHTMLAtCursor(tbl);
+}
+});
 }
 }
