@@ -34,5 +34,9 @@ document.execCommand('formatBlock', false, '<' + val + '>');
 document.getElementById('foreColor').addEventListener('input',(e)=>{
     document.execCommand('foreColor',false,e.target.value)
 })
+document.getElementById('hiliteColor').addEventListener('input', (e)=>{
+document.execCommand('hiliteColor', false, e.target.value);
+document.execCommand('backColor', false, e.target.value);
+});
 }
 }
