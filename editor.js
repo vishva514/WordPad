@@ -31,6 +31,8 @@ _bindToolbar(){
 const val = e.target.value;
 document.execCommand('formatBlock', false, '<' + val + '>');
 });
-
+document.getElementById('foreColor').addEventListener('input',(e)=>{
+    document.execCommand('foreColor',false,e.target.value)
+})
 }
 }
