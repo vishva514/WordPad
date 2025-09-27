@@ -38,5 +38,13 @@ document.getElementById('hiliteColor').addEventListener('input', (e)=>{
 document.execCommand('hiliteColor', false, e.target.value);
 document.execCommand('backColor', false, e.target.value);
 });
+document.getElementById('createLink').addEventListener('click', ()=>{
+const url = prompt('Enter URL (include http:// or https://):', 'https://');
+if(url) document.execCommand('createLink', false, url);
+});
+const uploader = document.getElementById('imageUploader');
+document.getElementById('insertImage').addEventListener('click', ()=>uploader.click());
+uploader.addEventListener('change', (e)=>this._handleImageUpload(e));
+
 }
 }
