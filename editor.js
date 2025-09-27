@@ -24,5 +24,13 @@ _bindToolbar(){
     document.getElementById('fontFamily').addEventListener('change', (e)=>{
         document.execCommand('fontName',false,e.target.value)
     })
+    document.getElementById('fontSize').addEventListener('change',(e)=>{
+        document.execCommand('fontSize',false,e.target.value)
+    })
+    document.getElementById('formatBlock').addEventListener('change', (e)=>{
+const val = e.target.value;
+document.execCommand('formatBlock', false, '<' + val + '>');
+});
+
 }
 }
