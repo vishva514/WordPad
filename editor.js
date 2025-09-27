@@ -45,6 +45,14 @@ if(url) document.execCommand('createLink', false, url);
 const uploader = document.getElementById('imageUploader');
 document.getElementById('insertImage').addEventListener('click', ()=>uploader.click());
 uploader.addEventListener('change', (e)=>this._handleImageUpload(e));
-
+document.getElementById('imageURL').addEventListener('keypress', (e)=>{
+if(e.key === 'Enter'){
+const url = e.target.value.trim();
+if(url){
+document.execCommand('insertImage', false, url);
+e.target.value = '';
+}
+}
+});
 }
 }

@@ -5,3 +5,10 @@
 --muted:#666;
 --accent:#0066cc;
 }
+[data-theme="dark"]{
+--bg:#121217;
+--panel:#1a1a1f;
+--text:#e6e6e6;
+--muted:#aaa;
+--accent:#66aaff;
+}
