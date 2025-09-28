@@ -116,4 +116,22 @@ _handleImageUpload(e){
     html+='</table><p></p>';
     return html;
   }
+  
+  _insertHTMLAtCursor(html){
+    document.execCommand('insertHTML', false, html);
+  }
+   _setupAutoSave(){
+    let timeout=null;
+    const save=()=>{
+      const data={title:this.titleEl.value,author:this.authorEl.value,content:this.root.innerHTML,savedAt:new Date().toISOString()};
+      localStorage.setItem(this.autosaveKey, JSON.stringify(data));
+      this._setSaved(new Date().toLocaleString());
+    };
+    [this.root,this.titleEl,this.authorEl].forEach(el=>{
+      el.addEventListener('input',()=>{
+        clearTimeout(timeout);
+        timeout=setTimeout(save,1000);
+      });
+    });
+  }
 }
