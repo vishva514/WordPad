@@ -97,4 +97,23 @@ document.getElementById('removeFormat').addEventListener('click', ()=>{
       alert('Draft cleared');
     });
 }
+_handleImageUpload(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      document.execCommand('insertImage', false, ev.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+    _buildTableHTML(rows, cols){
+    let html='<table border="1" style="border-collapse:collapse;width:100%">';
+    for(let r=0;r<rows;r++){
+      html+='<tr>';
+      for(let c=0;c<cols;c++) html+='<td>&nbsp;</td>';
+      html+='</tr>';
+    }
+    html+='</table><p></p>';
+    return html;
+  }
 }
