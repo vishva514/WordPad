@@ -160,5 +160,16 @@ _handleImageUpload(e){
   }
 }
 class Exporter {
-    
+    constructor(editor){ this.editor=editor; }
+
+  _buildHTML(){
+    return `<!doctype html><html><body><h1>${this.editor.titleEl.value}</h1><div>By ${this.editor.authorEl.value}</div><hr>${this.editor.root.innerHTML}</body></html>`;
+  }
+   exportDoc(){
+    const blob=new Blob([this._buildHTML()],{type:'application/msword'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=(this.editor.titleEl.value||'document')+'.doc';
+    a.click();
+  }
 }
