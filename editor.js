@@ -76,5 +76,25 @@ document.getElementById('removeFormat').addEventListener('click', ()=>{
       navigator.clipboard.writeText(this.root.innerText);
       alert('Plain text copied');
     });
+     document.getElementById('copyHTML').addEventListener('click', ()=>{
+      navigator.clipboard.writeText(this.root.innerHTML);
+      alert('HTML copied');
+    });
+      document.getElementById('previewBtn').addEventListener('click', ()=>this.preview());
+    document.getElementById('closePreview').addEventListener('click', ()=>{
+      document.getElementById('previewModal').setAttribute('aria-hidden','true');
+    });
+     document.getElementById('exportDoc').addEventListener('click', ()=>{
+      new Exporter(this).exportDoc();
+    });
+    document.getElementById('exportPDF').addEventListener('click', ()=>{
+      new Exporter(this).exportPDF();
+    });
+      document.getElementById('toggleTheme').addEventListener('click', ()=>this._toggleTheme());
+    document.getElementById('clearStorage').addEventListener('click', ()=>{
+      localStorage.removeItem(this.autosaveKey);
+      this._setSaved('Never');
+      alert('Draft cleared');
+    });
 }
 }
