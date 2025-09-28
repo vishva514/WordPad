@@ -41,5 +41,40 @@
 <option value="H3">Heading 3</option>
 </select>
 </div>
+ <div class="group">
+        <button data-cmd="justifyLeft">⟵</button>
+        <button data-cmd="justifyCenter">↔</button>
+        <button data-cmd="justifyRight">⟶</button>
+        <button data-cmd="justifyFull">☰</button>
+
+        <input type="color" id="foreColor" title="Text color" />
+        <input type="color" id="hiliteColor" title="Highlight color" />
+
+        <button data-cmd="insertUnorderedList">• List</button>
+        <button data-cmd="insertOrderedList">1. List</button>
+        <button data-cmd="indent">→</button>
+        <button data-cmd="outdent">←</button>
+      </div>
+      <div class="group">
+        <button id="createLink">Link</button>
+        <input type="file" id="imageUploader" accept="image/*" style="display:none" />
+        <button id="insertImage">Image</button>
+        <input id="imageURL" placeholder="Image URL" />
+
+        <button id="insertTable">Table</button>
+
+        <button id="removeFormat">Clear Format</button>
+        <button id="resetContent">Reset</button>
+
+        <button id="copyPlain">Copy Plain</button>
+        <button id="copyHTML">Copy HTML</button>
+
+        <button id="previewBtn">Preview</button>
+
+        <button id="exportDoc">Export .doc</button>
+        <button id="exportPDF">Export PDF</button>
+      </div>
+    </section>
+
     </body>
 </html>

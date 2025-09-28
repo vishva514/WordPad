@@ -62,5 +62,8 @@ const tbl = this._buildTableHTML(r,c);
 this._insertHTMLAtCursor(tbl);
 }
 });
+document.getElementById('removeFormat').addEventListener('click', ()=>{
+      document.execCommand('removeFormat', false, null);
+    });
 }
 }
