@@ -389,6 +389,19 @@ class Editor {
         }
       });
     }
+        const newPageBtn = document.getElementById('newPage');
+    if (newPageBtn) {
+      newPageBtn.addEventListener('click', () => {
+        if (confirm('Start a new page? Current content will be cleared.')) {
+          this.root.innerHTML = '';   
+          if (this.titleEl) this.titleEl.value = '';  
+          if (this.authorEl) this.authorEl.value = '';
+          localStorage.removeItem(this.autosaveKey);  
+          this._setSaved('Never');   
+        }
+      });
+    }
+
   }
 
   _handleImageUpload(e) {
