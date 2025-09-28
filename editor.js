@@ -134,4 +134,28 @@ _handleImageUpload(e){
       });
     });
   }
+    _restore(){
+    const raw=localStorage.getItem(this.autosaveKey);
+    if(raw){
+      const obj=JSON.parse(raw);
+      this.titleEl.value=obj.title||'';
+      this.authorEl.value=obj.author||'';
+      this.root.innerHTML=obj.content||'';
+      this._setSaved(new Date(obj.savedAt).toLocaleString());
+    }
+  }
+   _setSaved(text){ this.status.textContent=text; }
+   preview(){
+    const frame=document.getElementById('previewFrame');
+    const modal=document.getElementById('previewModal');
+    const html=`<!doctype html><html><body><h1>${this.titleEl.value}</h1><div>By ${this.authorEl.value}</div><hr>${this.root.innerHTML}</body></html>`;
+    frame.src=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+    modal.setAttribute('aria-hidden','false');
+  }
+    _setupTheme(){
+    const key='wp_ce_theme_v1';
+    const cur=localStorage.getItem(key)||'light';
+    document.documentElement.setAttribute('data-theme',cur);
+    document.getElementById('toggleTheme').textContent=cur==='dark'?'☀️':'🌙';
+  }
 }
