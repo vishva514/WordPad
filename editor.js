@@ -65,5 +65,16 @@ this._insertHTMLAtCursor(tbl);
 document.getElementById('removeFormat').addEventListener('click', ()=>{
       document.execCommand('removeFormat', false, null);
     });
+     document.getElementById('resetContent').addEventListener('click', ()=>{
+      if(confirm('Reset editor content?')){
+        this.root.innerHTML='';
+        localStorage.removeItem(this.autosaveKey);
+        this._setSaved('Never');
+      }
+    });
+      document.getElementById('copyPlain').addEventListener('click', ()=>{
+      navigator.clipboard.writeText(this.root.innerText);
+      alert('Plain text copied');
+    });
 }
 }
