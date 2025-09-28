@@ -7,9 +7,6 @@ class Editor {
     this.autosaveKey = 'wp_ce_draft_v1';
 
     this.savedRange = null;
-    this.pages=['']
-    this.currentPagesindex=0
-
     if (!this.root) {
       console.error(`Editor root not found: ${rootId}`);
       return;
@@ -485,21 +482,6 @@ class Editor {
       console.warn('restore failed', e);
     }
   }
-  _renderCurrentPage() {
-    if (this.pages[this.currentPageIndex] !== undefined) {
-        this.root.innerHTML = this.pages[this.currentPageIndex];
-    }
-    this._updatePageUI();
-}
-_savePageContent() {
-    this.pages[this.currentPageIndex] = this.root.innerHTML;
-}
-_updatePageUI() {
-    const currentEl = document.getElementById('currentPage');
-    const totalEl = document.getElementById('totalPages');
-    if (currentEl) currentEl.textContent = this.currentPageIndex + 1;
-    if (totalEl) totalEl.textContent = this.pages.length;
-}
 
   _save() {
     try {
@@ -614,6 +596,8 @@ class Exporter {
 
   _esc(s) { return (s + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 }
+
+
 window.addEventListener('DOMContentLoaded', () => {
   window.wpEditor = new Editor('editor');
 });
