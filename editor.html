@@ -75,6 +75,19 @@
         <button id="exportPDF">Export PDF</button>
       </div>
     </section>
-
+ <main>
+      <div id="editor" class="editor" contenteditable="true" spellcheck="true"></div>
+    </main>
+    <div id="previewModal" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <button id="closePreview">Close</button>
+        <iframe id="previewFrame"></iframe>
+      </div>
+    </div>
+     <footer class="statusbar">
+      <div id="status">Saved: <span id="savedAt">Never</span></div>
+      <div class="actions">Auto-save to localStorage · Works inside WordPress Custom HTML block</div>
+    </footer>
+  </div>
     </body>
 </html>
