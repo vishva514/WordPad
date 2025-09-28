@@ -172,4 +172,17 @@ class Exporter {
     a.download=(this.editor.titleEl.value||'document')+'.doc';
     a.click();
   }
+  exportPDF(){
+    const wrapper=document.createElement('div');
+    wrapper.innerHTML=this._buildHTML();
+    html2pdf().set({
+      margin:10,
+      filename:(this.editor.titleEl.value||'document')+'.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+    }).from(wrapper).save();
+  }
 }
+window.addEventListener('DOMContentLoaded',()=>{ new Editor('editor'); });
+
