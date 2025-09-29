@@ -7,6 +7,7 @@ class Editor {
     this.autosaveKey = 'wp_ce_draft_v1';
 
     this.savedRange = null;
+    
     if (!this.root) {
       console.error(`Editor root not found: ${rootId}`);
       return;
@@ -21,6 +22,7 @@ class Editor {
     this._setupAutoSave();
     this._setupTheme();
     this._setupImageEditing();
+    this._setupAutoPageBreak();
   }
 
   _saveSelectionIfInsideEditor() {
@@ -243,6 +245,7 @@ if (fontSizeEl) {
         }
       });
     }
+    
 
     const insertTableBtn = document.getElementById('insertTable');
     if (insertTableBtn) {
@@ -378,22 +381,77 @@ if (fontSizeEl) {
         }
       });
     }
-        const newPageBtn = document.getElementById('newPage');
-    if (newPageBtn) {
-      newPageBtn.addEventListener('click', () => {
-        if (confirm('Start a new page? Current content will be cleared.')) {
-          this.root.innerHTML = '';   
-          if (this.titleEl) this.titleEl.value = '';  
-          if (this.authorEl) this.authorEl.value = '';
-          localStorage.removeItem(this.autosaveKey);  
-          this._setSaved('Never');   
-        }
-      });
-    }
+    const newPageBtn = document.getElementById('newPage');
+if (newPageBtn) {
+  newPageBtn.addEventListener('click', () => {
+
+    const newPage = document.createElement('div');
+    newPage.classList.add('page');
+    newPage.contentEditable = 'true';
+    this.root.appendChild(newPage);
+
+
+    const range = document.createRange();
+    range.selectNodeContents(newPage);
+    range.collapse(true);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+  
+    this.savedRange = range.cloneRange();
+  });
+}
+
+    
 
   }
+_setupAutoPageBreak() {
+  const ensureFirstPage = () => {
+    if (!this.root.querySelector('.page')) {
+      const firstPage = document.createElement('div');
+      firstPage.classList.add('page');
+      firstPage.contentEditable = 'true';
+      this.root.appendChild(firstPage);
+    }
+  };
+
+  const checkPages = () => {
+    const pages = this.root.querySelectorAll('.page');
+    if (!pages.length) {
+      ensureFirstPage();
+      return;
+    }
+
+    pages.forEach(page => {
+      while (page.scrollHeight > page.clientHeight) {
+   
+        const newPage = document.createElement('div');
+        newPage.classList.add('page');
+        newPage.contentEditable = 'true';
+
+        // Move overflowing nodes to the new page
+        let lastChild = page.lastChild;
+        while (lastChild && page.scrollHeight > page.clientHeight) {
+          newPage.insertBefore(lastChild, newPage.firstChild);
+          lastChild = page.lastChild;
+        }
+
+        page.after(newPage);
+      }
+    });
+  };
+
+  // Run once on load
+  ensureFirstPage();
+
+  // Re-check whenever typing happens
+  this.root.addEventListener('input', checkPages);
+}
+
+
     _setupImageEditing() {
-    // Click to select/deselect images
+
     this.root.addEventListener("click", (e) => {
       if (e.target.tagName === "IMG") {
         if (this.selectedImg) this.selectedImg.classList.remove("selected");
@@ -560,6 +618,7 @@ if (fontSizeEl) {
     const btn = document.getElementById('toggleTheme');
     if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
   }
+  
 }
 
 class Exporter {
