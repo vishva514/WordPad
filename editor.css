@@ -12,7 +12,7 @@
 --muted:#aaa;
 --accent:#66aaff;
 }
-*{box-sizing:border-box;font-family:Arial,system-ui,'Segoe UI',Roboto}
+*{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--text);min-height:100vh}
 .app{max-width:1100px;margin:18px auto;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.08)}
 .topbar{display:flex;align-items:center;padding:10px 14px;background:var(--panel);gap:12px}
@@ -20,7 +20,8 @@ body{margin:0;background:var(--bg);color:var(--text);min-height:100vh}
 .topbar .meta input{margin-left:8px;padding:6px;border-radius:6px;border:1px solid #ddd}
 .toolbar{display:flex;flex-direction:column;padding:10px;background:linear-gradient(180deg,rgba(0,0,0,.02),transparent)}
 .toolbar .group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.toolbar button, .toolbar select, .toolbar input{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:var(--panel);cursor:pointer}
+.toolbar button, .toolbar select, .toolbar input{padding:6px 8px;border-radius:6px;border:1px solid #ddd;
+  background:var(--panel); color: var(--text);cursor:pointer}
 .toolbar input[type=color]{padding:0;width:36px;height:36px;border-radius:6px}
 main{padding:12px;background:var(--bg)}
 .editor{min-height:400px;background:var(--panel);padding:16px;border-radius:8px;border:1px solid #e6e6e6}
@@ -32,4 +33,16 @@ main{padding:12px;background:var(--bg)}
 button:active{transform:translateY(1px)}
 @media (max-width:720px){
   .toolbar .group{gap:6px}
+
+}
+.editable-img {
+  max-width: 100%;
+  display: inline-block;
+  resize: both;          
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.editable-img.selected {
+  border-color: var(--accent);  
 }

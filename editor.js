@@ -20,6 +20,7 @@ class Editor {
     this._restore();
     this._setupAutoSave();
     this._setupTheme();
+    this._setupImageEditing();
   }
 
   _saveSelectionIfInsideEditor() {
@@ -60,8 +61,8 @@ class Editor {
         range.insertNode(span);
      
         const newRange = document.createRange();
-        newRange.setStart(span.firstChild, 1);
-        newRange.collapse(true);
+      newRange.setStart(span, 0); 
+           newRange.setEnd(span, 0);
         sel.removeAllRanges();
         sel.addRange(newRange);
 
@@ -125,41 +126,29 @@ class Editor {
     }
 
 
-    const fontSizeMap = { '1': '10px', '2': '12px', '3': '14px', '4': '18px', '5': '24px', '6': '32px', '7': '48px' };
+    const fontSizeMap = { '3': '12px','6': '14px', '9': '24px', '12': '32px'};
     const fontSizeEl = document.getElementById('fontSize');
-    if (fontSizeEl) {
-      fontSizeEl.addEventListener('change', (e) => {
-        this._restoreSelection();
-        this.root.focus();
-        const val = e.target.value;
+if (fontSizeEl) {
+  fontSizeEl.addEventListener('change', (e) => {
+    this._restoreSelection();
+    this.root.focus();
+    const val = e.target.value;
 
-        if (/^[1-7]$/.test(val)) {
-          try {
-            document.execCommand('fontSize', false, val);
+    if (fontSizeMap[val]) {
 
-            setTimeout(() => {
-              const fonts = this.root.querySelectorAll(`font[size="${val}"]`);
-              fonts.forEach(f => {
-                f.removeAttribute('size');
-                f.style.fontSize = fontSizeMap[val] || '14px';
-              });
-              this._save();
-            }, 0);
-          } catch (e) {
-            this._wrapSelectionWithStyle({ fontSize: fontSizeMap[val] || '14px' });
-            this._save();
-          }
-        } else if (/^\d+(px|pt|em|rem)$/.test(val)) {
-          this._wrapSelectionWithStyle({ fontSize: val });
-          this._save();
-        } else {
-          if (/^\d+$/.test(val)) {
-            this._wrapSelectionWithStyle({ fontSize: val + 'px' });
-            this._save();
-          }
-        }
-      });
+      this._wrapSelectionWithStyle({ fontSize: fontSizeMap[val] });
+      this._save();
+    } else if (/^\d+(px|pt|em|rem)$/.test(val)) {
+
+      this._wrapSelectionWithStyle({ fontSize: val });
+      this._save();
+    } else if (/^\d+$/.test(val)) {
+
+      this._wrapSelectionWithStyle({ fontSize: val + 'px' });
+      this._save();
     }
+  });
+}
 
     const formatBlockEl = document.getElementById('formatBlock');
     if (formatBlockEl) {
@@ -402,6 +391,28 @@ class Editor {
       });
     }
 
+  }
+    _setupImageEditing() {
+    // Click to select/deselect images
+    this.root.addEventListener("click", (e) => {
+      if (e.target.tagName === "IMG") {
+        if (this.selectedImg) this.selectedImg.classList.remove("selected");
+        this.selectedImg = e.target;
+        this.selectedImg.classList.add("editable-img", "selected");
+      } else {
+        if (this.selectedImg) this.selectedImg.classList.remove("selected");
+        this.selectedImg = null;
+      }
+    });
+
+    // Delete selected image with Delete key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Delete" && this.selectedImg) {
+        this.selectedImg.remove();
+        this.selectedImg = null;
+        this._save();
+      }
+    });
   }
 
   _handleImageUpload(e) {
