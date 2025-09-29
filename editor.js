@@ -424,7 +424,7 @@ _setupAutoPageBreak() {
     }
 
     pages.forEach(page => {
-      while (page.scrollHeight > page.clientHeight) {
+      while (page.scrollHeight-1> page.clientHeight) {
    
         const newPage = document.createElement('div');
         newPage.classList.add('page');
@@ -441,11 +441,7 @@ _setupAutoPageBreak() {
       }
     });
   };
-
-  // Run once on load
   ensureFirstPage();
-
-  // Re-check whenever typing happens
   this.root.addEventListener('input', checkPages);
 }
 
@@ -627,14 +623,13 @@ class Exporter {
   }
 
   _buildHTML() {
-    const title = this.editor.titleEl ? this.editor.titleEl.value : 'Document';
-    const author = this.editor.authorEl ? this.editor.authorEl.value : '';
+  
     const css = `
       body{font-family: Arial, Helvetica, sans-serif; padding:20px;}
       table{border-collapse:collapse;}
       table td, table th{border:1px solid #999; padding:6px;}
     `;
-    return `<!doctype html><html><head><meta charset="utf-8"><title>${this._esc(title)}</title><style>${css}</style></head><body><h1>${this._esc(title)}</h1><div>By ${this._esc(author)}</div><hr>${this.editor.root.innerHTML}</body></html>`;
+    return `<!doctype html><html><head><meta charset="utf-8"><style>${css}</style></head><body><hr>${this.editor.root.innerHTML}</body></html>`;
   }
 
   exportDoc() {
@@ -655,27 +650,46 @@ class Exporter {
     }
   }
 
-  exportPDF() {
-    try {
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = this._buildHTML();
-      const opt = {
-        margin: 10,
-        filename: (this.editor.titleEl && this.editor.titleEl.value ? this.editor.titleEl.value : 'document') + '.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      if (typeof html2pdf === 'undefined') {
-        alert('html2pdf.js not loaded (PDF export unavailable).');
-        return;
-      }
-      html2pdf().set(opt).from(wrapper).save();
-    } catch (e) {
-      console.error('exportPDF failed', e);
-      alert('Export to PDF failed: ' + (e.message || e));
+ exportPDF() {
+  try {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = this._buildHTML();
+
+    wrapper.querySelectorAll('.page').forEach(page => {
+      page.style.display = 'flex';
+      page.style.flexDirection = 'column';
+      page.style.alignItems = 'center';
+      page.style.justifyContent = 'flex-start';
+      page.style.boxSizing = 'border-box';
+    });
+
+    wrapper.querySelectorAll('.page img, .page table').forEach(el => {
+      el.style.display = 'block';
+      el.style.margin = '0 auto';
+      el.style.maxWidth = '100%';
+      el.style.height = 'auto';
+    });
+
+    const opt = {
+      margin: 10,
+      filename: (this.editor.titleEl?.value || 'document') + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, letterRendering: true, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    if (typeof html2pdf === 'undefined') {
+      alert('html2pdf.js not loaded (PDF export unavailable).');
+      return;
     }
+
+    html2pdf().set(opt).from(wrapper).save();
+  } catch (e) {
+    console.error('exportPDF failed', e);
+    alert('Export to PDF failed: ' + (e.message || e));
   }
+}
+
 
   _esc(s) { return (s + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 }

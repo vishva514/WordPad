@@ -54,11 +54,12 @@ main{padding:12px;background:var(--bg)}
 button:active{transform:translateY(1px)}
 .page {
   width: 210mm;      
-  height: 297mm; 
+  height: 230mm; 
   margin: 20px auto;
   padding: 20mm;
   background: white;
-  border: 1px solid #ddd;
+  box-sizing: border-box;
+  align-items: center;
   box-shadow: 0 0 5px rgba(0,0,0,.1);
   overflow: hidden;
 }
