@@ -405,7 +405,7 @@ if (fontSizeEl) {
       }
     });
 
-    // Delete selected image with Delete key
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Delete" && this.selectedImg) {
         this.selectedImg.remove();
@@ -425,7 +425,7 @@ if (fontSizeEl) {
         this.root.focus();
         document.execCommand('insertImage', false, ev.target.result);
       } catch (err) {
-        // fallback
+
         this._insertHTMLAtCursor(`<img src="${ev.target.result}" alt="" />`);
       }
       this._save();
