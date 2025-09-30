@@ -40,11 +40,19 @@ body{margin:0;background:var(--bg);color:var(--text);min-height:100vh}
   padding: 12px;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.03), transparent);
   border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 .toolbar button, .toolbar select, .toolbar input{padding:6px 8px;border-radius:6px;border:1px solid #ddd;
   background:var(--panel); color: var(--text);cursor:pointer}
 .toolbar input[type=color]{padding:0;width:36px;height:36px;border-radius:6px}
-main{padding:12px;background:var(--bg)}
+main {
+  padding: 12px;
+  background: var(--bg);
+  max-height: calc(100vh - 120px); 
+  overflow-y: auto;
+}
 /* .editor{min-height:400px;background:var(--panel);padding:16px;border-radius:8px;border:1px solid #e6e6e6} */
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.4)}
 .modal[aria-hidden="false"]{display:flex}
@@ -82,3 +90,4 @@ button:active{transform:translateY(1px)}
 .editable-img.selected {
   border-color: var(--accent);  
 }
+

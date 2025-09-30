@@ -294,7 +294,7 @@ if (fontSizeEl) {
       copyPlainBtn.addEventListener('click', async () => {
         try {
           await navigator.clipboard.writeText(this.root.innerText);
-          alert('Plain text copied to clipboard');
+          //*alert('Plain text copied to clipboard');
         } catch (err) {
           console.warn('copy plain failed', err);
 
@@ -304,7 +304,7 @@ if (fontSizeEl) {
           ta.select();
           document.execCommand('copy');
           ta.remove();
-          alert('Plain text copied (fallback)');
+          //*alert('Plain text copied (fallback)');
         }
       });
     }
@@ -319,19 +319,19 @@ if (fontSizeEl) {
             const blob = new Blob([html], { type: 'text/html' });
             const item = new ClipboardItem({ 'text/html': blob });
             await navigator.clipboard.write([item]);
-            alert('HTML copied to clipboard');
+            //*alert('HTML copied to clipboard');
           } else {
             await navigator.clipboard.writeText(html);
-            alert('HTML copied as plain text fallback');
+            //*alert('HTML copied as plain text fallback');
           }
         } catch (err) {
           console.warn('copy HTML failed', err);
 
           try {
             await navigator.clipboard.writeText(html);
-            alert('HTML copied as plain text fallback');
+            //*alert('HTML copied as plain text fallback');
           } catch (e) {
-            alert('Copy failed');
+            //*alert('Copy failed');
           }
         }
       });
@@ -377,7 +377,7 @@ if (fontSizeEl) {
         if (confirm('Clear auto-saved draft from localStorage?')) {
           localStorage.removeItem(this.autosaveKey);
           this._setSaved('Never');
-          alert('Draft cleared');
+          //*alert('Draft cleared');
         }
       });
     }
@@ -429,8 +429,6 @@ _setupAutoPageBreak() {
         const newPage = document.createElement('div');
         newPage.classList.add('page');
         newPage.contentEditable = 'true';
-
-        // Move overflowing nodes to the new page
         let lastChild = page.lastChild;
         while (lastChild && page.scrollHeight > page.clientHeight) {
           newPage.insertBefore(lastChild, newPage.firstChild);
@@ -445,29 +443,27 @@ _setupAutoPageBreak() {
   this.root.addEventListener('input', checkPages);
 }
 
+_setupImageEditing() {
+  this.root.addEventListener("click", (e) => {
+    if (e.target.tagName === "IMG" || e.target.tagName === "TABLE") {
+      if (this.selectedEl) this._removeResizeHandles(this.selectedEl);
 
-    _setupImageEditing() {
+      this.selectedEl = e.target;
+      this._makeResizable(this.selectedEl);
+    } else {
+      if (this.selectedEl) this._removeResizeHandles(this.selectedEl);
+      this.selectedEl = null;
+    }
+  });
 
-    this.root.addEventListener("click", (e) => {
-      if (e.target.tagName === "IMG") {
-        if (this.selectedImg) this.selectedImg.classList.remove("selected");
-        this.selectedImg = e.target;
-        this.selectedImg.classList.add("editable-img", "selected");
-      } else {
-        if (this.selectedImg) this.selectedImg.classList.remove("selected");
-        this.selectedImg = null;
-      }
-    });
-
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Delete" && this.selectedImg) {
-        this.selectedImg.remove();
-        this.selectedImg = null;
-        this._save();
-      }
-    });
-  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Delete" && this.selectedEl) {
+      this.selectedEl.remove();
+      this.selectedEl = null;
+      this._save();
+    }
+  });
+}
 
   _handleImageUpload(e) {
     const file = e.target.files && e.target.files[0];
@@ -646,7 +642,7 @@ class Exporter {
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (e) {
       console.error('exportDoc failed', e);
-      alert('Export to .doc failed: ' + (e.message || e));
+      //*alert('Export to .doc failed: ' + (e.message || e));
     }
   }
 
@@ -679,14 +675,14 @@ class Exporter {
     };
 
     if (typeof html2pdf === 'undefined') {
-      alert('html2pdf.js not loaded (PDF export unavailable).');
+      //*alert('html2pdf.js not loaded (PDF export unavailable).');
       return;
     }
 
     html2pdf().set(opt).from(wrapper).save();
   } catch (e) {
     console.error('exportPDF failed', e);
-    alert('Export to PDF failed: ' + (e.message || e));
+    //*alert('Export to PDF failed: ' + (e.message || e));
   }
 }
 
